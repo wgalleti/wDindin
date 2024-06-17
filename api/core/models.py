@@ -18,7 +18,9 @@ class User(AbstractUser, BaseModelUUID):
     )
     first_name = None
     last_name = None
-    email = models.EmailField()
+    email = models.EmailField(
+        unique=True,
+    )
     username = models.CharField(
         blank=True,
         max_length=255,
@@ -31,3 +33,6 @@ class User(AbstractUser, BaseModelUUID):
     )
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
+
+    def get_full_name(self):
+        return self.name

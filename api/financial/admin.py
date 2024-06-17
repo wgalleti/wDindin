@@ -66,13 +66,12 @@ class TransactionAdmin(BaseAdminCreatedMixin):
         "date",
         "bank_account",
         "category",
-        "transaction_type",
         "description",
+        "transaction_type",
         "value",
     ]
     list_filter = [
         "bank_account",
         "category",
-        "transaction_type",
         "date",
     ]

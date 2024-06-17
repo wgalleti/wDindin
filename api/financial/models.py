@@ -1,6 +1,12 @@
+import decimal
+
+from django.core.validators import MinValueValidator
 from django.db import models
 
-from core.mixins.models import BaseModelUUID, BaseModelCreatedData
+from core.mixins.models import (
+    BaseModelUUID,
+    BaseModelCreatedData,
+)
 
 
 class Bank(
@@ -12,7 +18,12 @@ class Bank(
     )
     code = models.CharField(
         max_length=100,
+        unique=True,
     )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class BankAccount(
@@ -65,8 +76,12 @@ class Category(
     transaction_type = models.CharField(
         max_length=30,
         choices=TransactionType.choices,
-        default=TransactionType.INCOME,
+        default=TransactionType.EXPENSE,
     )
+
+    @property
+    def value(self):
+        return sum(self.transactions.all().values_list("value", flat=True))
 
 
 class Transaction(
@@ -86,14 +101,20 @@ class Transaction(
         null=True,
         blank=True,
     )
-    transaction_type = models.CharField(
-        max_length=30,
-        choices=TransactionType.choices,
-        default=TransactionType.INCOME,
-    )
     description = models.TextField()
     value = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0,
+        validators=[
+            MinValueValidator(decimal.Decimal("0.01")),
+        ],
     )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    @property
+    def transaction_type(self):
+        return self.category.transaction_type
