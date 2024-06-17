@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 
-from core.api.serializers import UserSerializer
+from core.api.serializers import UserSerializerV1
 
 User = get_user_model()
 
@@ -18,7 +18,7 @@ def test_user_serializer(create_user):
         name="John Doe",
         password="john123",
     )
-    serializer = UserSerializer(user)
+    serializer = UserSerializerV1(user)
     data = serializer.data
     assert data["username"] == "user"
     assert data["email"] == "test@example.com"

@@ -1,6 +1,6 @@
 import pytest
 
-from financial.api.serializers import BankSerializer
+from financial.api.serializers import BankSerializerV1
 from financial.models import Bank
 
 
@@ -11,7 +11,7 @@ def test_bank_serializer(create_test_user):
         code="test",
         created_by=create_test_user,
     )
-    serializer = BankSerializer(bank)
+    serializer = BankSerializerV1(bank)
     data = serializer.data
     assert data["name"] == "Bank Test"
     assert data["code"] == "test"

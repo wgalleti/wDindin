@@ -6,7 +6,7 @@ from core.mixins.models import BaseModelUUID, BaseModelCreatedData
 
 def custom_upload_to(instance, filename):
     return "user_{0}/{1}".format(
-        instance.user.id,
+        instance.id,
         filename,
     )
 

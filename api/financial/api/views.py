@@ -6,28 +6,28 @@ from ..models import (
     Transaction,
 )
 from .serializers import (
-    BankSerializer,
-    BankAccountSerializer,
-    CategorySerializer,
-    TransactionSerializer,
+    BankSerializerV1,
+    BankAccountSerializerV1,
+    CategorySerializerV1,
+    TransactionSerializerV1,
 )
 
 
-class BankViewSet(viewsets.ModelViewSet):
+class BankViewSetV1(viewsets.ModelViewSet):
     queryset = Bank.objects.all()
-    serializer_class = BankSerializer
+    serializer_class = BankSerializerV1
 
 
-class BankAccountViewSet(viewsets.ModelViewSet):
+class BankAccountViewSetV1(viewsets.ModelViewSet):
     queryset = BankAccount.objects.all()
-    serializer_class = BankAccountSerializer
+    serializer_class = BankAccountSerializerV1
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSetV1(viewsets.ModelViewSet):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = CategorySerializerV1
 
 
-class TransactionViewSet(viewsets.ModelViewSet):
+class TransactionViewSetV1(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
+    serializer_class = TransactionSerializerV1

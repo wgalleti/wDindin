@@ -1,5 +1,3 @@
-from rest_framework import serializers
-
 from core.mixins.serializers import BaseModelCreatedSerializer
 from ..models import (
     Bank,
@@ -9,25 +7,25 @@ from ..models import (
 )
 
 
-class BankSerializer(BaseModelCreatedSerializer):
+class BankSerializerV1(BaseModelCreatedSerializer):
     class Meta:
         model = Bank
         fields = "__all__"
 
 
-class BankAccountSerializer(BaseModelCreatedSerializer):
+class BankAccountSerializerV1(BaseModelCreatedSerializer):
     class Meta:
         model = BankAccount
         fields = "__all__"
 
 
-class CategorySerializer(BaseModelCreatedSerializer):
+class CategorySerializerV1(BaseModelCreatedSerializer):
     class Meta:
         model = Category
         fields = "__all__"
 
 
-class TransactionSerializer(BaseModelCreatedSerializer):
+class TransactionSerializerV1(BaseModelCreatedSerializer):
     class Meta:
         model = Transaction
         fields = "__all__"
