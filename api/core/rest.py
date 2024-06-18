@@ -10,7 +10,22 @@ class CustomPagination(pagination.LimitOffsetPagination):
     offset_query_param = "skip"
 
     def get_paginated_response(self, data):
-        return response.Response(OrderedDict([("total", self.count), ("data", data)]))
+
+        return response.Response(
+            OrderedDict(
+                [
+                    (
+                        "links",
+                        {
+                            "next": self.get_next_link(),
+                            "previous": self.get_previous_link(),
+                        },
+                    ),
+                    ("total", self.count),
+                    ("data", data),
+                ]
+            )
+        )
 
 
 class CustomSearchFilter(SearchFilter):

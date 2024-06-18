@@ -1,4 +1,8 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from core.mixins.views import BaseViewSet
 from ..models import (
     Bank,
     BankAccount,
@@ -13,7 +17,7 @@ from .serializers import (
 )
 
 
-class BankViewSetV1(viewsets.ModelViewSet):
+class BankViewSetV1(BaseViewSet):
     queryset = Bank.objects.all()
     serializer_class = BankSerializerV1
 
@@ -21,6 +25,14 @@ class BankViewSetV1(viewsets.ModelViewSet):
 class BankAccountViewSetV1(viewsets.ModelViewSet):
     queryset = BankAccount.objects.all()
     serializer_class = BankAccountSerializerV1
+
+    @action(methods=["GET"], detail=False)
+    def types(self, request):
+        data = [
+            {"id": key, "name": value}
+            for key, value in BankAccount.BankAccountType.choices
+        ]
+        return Response(data)
 
 
 class CategoryViewSetV1(viewsets.ModelViewSet):
