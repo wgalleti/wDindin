@@ -5,24 +5,25 @@
  */
 
 // Plugins
-import { registerPlugins } from "@/plugins";
-import { createPinia } from "pinia";
-import store from "@/store";
+import { registerPlugins } from '@/plugins'
+import { createPinia } from 'pinia'
+
+import store from '@/store'
 // Components
-import App from "./App.vue";
+import App from './App.vue'
 
 // Composables
-import { createApp } from "vue";
+import { createApp } from 'vue'
 
-const app = createApp(App);
-const pinia = createPinia();
+const app = createApp(App)
+const pinia = createPinia()
 
-registerPlugins(app);
-app.use(pinia);
+registerPlugins(app)
+app.use(pinia)
 
-const $store = store();
-app.config.globalProperties.$store = $store;
-app.config.globalProperties.$store.setStores();
+const $store = store()
+app.config.globalProperties.$store = $store
+app.config.globalProperties.$store.setStores()
 
-app.mount("#app");
-export { $store };
+app.mount('#app')
+export { $store }
