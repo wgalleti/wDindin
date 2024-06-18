@@ -9,11 +9,30 @@
       required
       ref="name"
     />
-    <v-text-field
-      v-model="form.code"
-      label="Código"
+    <v-autocomplete
+      v-model="form.icon"
+      label="Icone"
       :rules="requiredRule"
-      required
+      :items="icons"
+      item-title="name"
+      item-value="id"
+    >
+      <template v-slot:item="{ props, item }">
+        <v-list-item
+          v-bind="props"
+          :prepend-icon="item.value"
+          :title="item.title"
+        />
+      </template>
+    </v-autocomplete>
+    <v-autocomplete
+      v-model="form.transaction_type"
+      label="Tipo"
+      :rules="requiredRule"
+      item-title="name"
+      item-value="id"
+      :items="this.$store.category.types"
+      focused
     />
     <v-alert
       closable
@@ -42,24 +61,35 @@
 
 <script>
 import { useToast } from 'vue-toastification'
+import * as mdiIcons from '@mdi/js'
 
 const toast = useToast()
 export default {
   data: () => ({
     error: false,
     form: {},
-    requiredRule: [(v) => !!v || 'Campo obrigatório']
+    requiredRule: [(v) => !!v || 'Campo obrigatório'],
+    icons: [],
+    loading: false
   }),
+
   methods: {
+    loadIcons() {
+      this.icons = Object.keys(mdiIcons).map((icon) => {
+        const id = icon.replace(/([A-Z])/g, '-$1').toLocaleLowerCase()
+        const name = icon.replace('mdi', '').replace(/([A-Z])/g, ' $1')
+        return { id, name }
+      })
+    },
     async submit() {
       this.loading = true
       const { valid } = await this.$refs.form.validate()
 
       if (valid) {
-        const data = await this.$store.bank.add(this.form)
+        const data = await this.$store.category.add(this.form)
         if (data) {
           this.$emit('finished')
-          toast.success('Banco registrado com sucesso!')
+          toast.success('Categoria registrada com sucesso!')
         } else {
           this.error = true
           this.loading = false
@@ -69,6 +99,10 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    this.loadIcons()
+    this.$store.category.loadTypes()
   }
 }
 </script>

@@ -1,8 +1,9 @@
+import { defineStore } from 'pinia'
 import state from '@/store/state.js'
 import authStore from '@/store/auth'
 import bankStore from '@/store/bank'
 import bankAccountStore from '@/store/bankaccount'
-import { defineStore } from 'pinia'
+import categoryStore from '@/store/category'
 
 export const useStore = defineStore('core', {
   state: () => state,
@@ -11,6 +12,7 @@ export const useStore = defineStore('core', {
       this.auth = authStore()
       this.bank = bankStore()
       this.bankAccount = bankAccountStore()
+      this.category = categoryStore()
     }
   }
 })

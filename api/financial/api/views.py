@@ -8,6 +8,7 @@ from ..models import (
     BankAccount,
     Category,
     Transaction,
+    TransactionType,
 )
 from .serializers import (
     BankSerializerV1,
@@ -29,7 +30,10 @@ class BankAccountViewSetV1(viewsets.ModelViewSet):
     @action(methods=["GET"], detail=False)
     def types(self, request):
         data = [
-            {"id": key, "name": value}
+            {
+                "id": key,
+                "name": value,
+            }
             for key, value in BankAccount.BankAccountType.choices
         ]
         return Response(data)
@@ -38,6 +42,17 @@ class BankAccountViewSetV1(viewsets.ModelViewSet):
 class CategoryViewSetV1(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializerV1
+
+    @action(methods=["GET"], detail=False)
+    def types(self, request):
+        data = [
+            {
+                "id": key,
+                "name": value,
+            }
+            for key, value in TransactionType.choices
+        ]
+        return Response(data)
 
 
 class TransactionViewSetV1(viewsets.ModelViewSet):

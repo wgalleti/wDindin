@@ -6,8 +6,9 @@
       prepend-inner-icon="mdi-email"
       type="email"
       :rules="emailRules"
+      focused
+      autofocus
       required
-      variant="solo"
     />
     <v-text-field
       v-model="password"
@@ -16,7 +17,6 @@
       type="password"
       :rules="passwordRules"
       required
-      variant="solo"
     />
 
     <v-alert
