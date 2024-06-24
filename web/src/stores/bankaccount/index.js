@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 import http from '@/plugins/axios'
-import state from '@/store/category/state'
+import state from '@/stores/bankaccount/state'
 
-export default defineStore('category', {
+export default defineStore('bankAccount', {
   state: () => state,
   actions: {
     async load() {
       try {
-        const { data } = await http.get('/api/v1/categories/', {
+        const { data } = await http.get('/api/v1/accounts/', {
           params: { all: true }
         })
         this.banks = data
@@ -17,7 +17,7 @@ export default defineStore('category', {
     },
     async loadTypes() {
       try {
-        const { data } = await http.get('/api/v1/categories/types')
+        const { data } = await http.get('/api/v1/accounts/types')
         this.types = data
       } catch {
         this.types = []
@@ -25,7 +25,7 @@ export default defineStore('category', {
     },
     async add(bankData) {
       try {
-        const { data } = await http.post('api/v1/categories/', bankData)
+        const { data } = await http.post('api/v1/accounts/', bankData)
         return data
       } catch {
         return false
@@ -33,7 +33,7 @@ export default defineStore('category', {
     },
     async update(key, bankData) {
       try {
-        const { data } = await http.put(`api/v1/categories/${key}`, bankData)
+        const { data } = await http.put(`api/v1/accounts/${key}`, bankData)
         return data
       } catch {
         return false
@@ -41,7 +41,7 @@ export default defineStore('category', {
     },
     async delete(key) {
       try {
-        await http.delete(`api/v1/categories/${key}`)
+        await http.delete(`api/v1/accounts/${key}`)
         return true
       } catch {
         return false

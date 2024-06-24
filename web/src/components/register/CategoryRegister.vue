@@ -9,8 +9,7 @@
       <v-btn
         class="text-none font-weight-regular"
         prepend-icon="mdi-shape"
-        text="Categoria"
-        variant="tonal"
+        variant="text"
         v-bind="activatorProps"
       />
     </template>

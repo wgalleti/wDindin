@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import http from '@/plugins/axios'
-import state from '@/store/bank/state'
+import state from '@/stores/bank/state'
 
 export default defineStore('bank', {
   state: () => state,

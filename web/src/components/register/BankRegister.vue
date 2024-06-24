@@ -9,8 +9,7 @@
       <v-btn
         class="text-none font-weight-regular"
         prepend-icon="mdi-bank"
-        text="Banco"
-        variant="tonal"
+        variant="text"
         v-bind="activatorProps"
       ></v-btn>
     </template>

@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import state from '@/store/state.js'
-import authStore from '@/store/auth'
-import bankStore from '@/store/bank'
-import bankAccountStore from '@/store/bankaccount'
-import categoryStore from '@/store/category'
+import state from '@/stores/state.js'
+import authStore from '@/stores/auth'
+import bankStore from '@/stores/bank'
+import bankAccountStore from '@/stores/bankaccount'
+import categoryStore from '@/stores/category'
 
 export const useStore = defineStore('core', {
   state: () => state,

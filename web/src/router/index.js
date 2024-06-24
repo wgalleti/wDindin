@@ -1,6 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from '@/router/routes'
-import { authGuard } from '@/router/guard'
+import { createRouter, createWebHistory } from 'vue-router'
+
+import authGuard from '@/router/guard'
+import routes from '@/router/routes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,5 +9,4 @@ const router = createRouter({
 })
 
 router.beforeEach(authGuard)
-
 export default router

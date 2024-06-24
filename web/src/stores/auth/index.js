@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
-import state from '@/store/auth/state'
-import getters from '@/store/auth/getters'
+import state from '@/stores/auth/state'
+import getters from '@/stores/auth/getters'
 import http from '@/plugins/axios'
 import constants from '@/constants'
 

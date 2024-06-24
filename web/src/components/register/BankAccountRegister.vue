@@ -9,8 +9,7 @@
       <v-btn
         class="text-none font-weight-regular"
         prepend-icon="mdi-wallet-outline"
-        text="Contas"
-        variant="tonal"
+        variant="text"
         v-bind="activatorProps"
       ></v-btn>
     </template>
