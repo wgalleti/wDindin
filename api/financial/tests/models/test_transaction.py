@@ -13,11 +13,21 @@ def test_transaction_create(
     create_test_category_expense,
     create_test_category_income,
     create_test_account,
+    create_test_credit_card,
 ):
     for i in range(10):
         category = (
             create_test_category_income if i % 2 == 0 else create_test_category_expense
         )
+        is_credit_card = i % 2 == 0
+        account = create_test_account
+        card = create_test_credit_card
+
+        if is_credit_card:
+            account = None
+        else:
+            card = None
+
         value = decimal.Decimal(
             10 * i + 0.01,
         ).quantize(
@@ -27,7 +37,8 @@ def test_transaction_create(
 
         Transaction.objects.create(
             date=timezone.now(),
-            bank_account=create_test_account,
+            bank_account=account,
+            credit_card=card,
             category=category,
             description=f"Transaction {i} for {category.name}",
             value=value,

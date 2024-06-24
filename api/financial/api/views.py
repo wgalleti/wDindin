@@ -9,12 +9,14 @@ from ..models import (
     Category,
     Transaction,
     TransactionType,
+    CreditCard,
 )
 from .serializers import (
     BankSerializerV1,
     BankAccountSerializerV1,
     CategorySerializerV1,
     TransactionSerializerV1,
+    CreditCardSerializerV1,
 )
 
 
@@ -35,6 +37,22 @@ class BankAccountViewSetV1(viewsets.ModelViewSet):
                 "name": value,
             }
             for key, value in BankAccount.BankAccountType.choices
+        ]
+        return Response(data)
+
+
+class CreditCardViewSetV1(BaseViewSet):
+    queryset = CreditCard.objects.all()
+    serializer_class = CreditCardSerializerV1
+
+    @action(methods=["GET"], detail=False)
+    def types(self, request):
+        data = [
+            {
+                "id": key,
+                "name": value,
+            }
+            for key, value in CreditCard.CreditCardFlag.choices
         ]
         return Response(data)
 

@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
@@ -134,3 +135,5 @@ SIMPLE_JWT = {
         days=config("EXPIRATION_DELTA", default=1, cast=int)
     ),
 }
+
+CRYPTOGRAPHY_KEY = config("CRYPTOGRAPHY_KEY").encode()

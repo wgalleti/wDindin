@@ -1,7 +1,16 @@
 import pytest
+from cryptography.fernet import Fernet
+from django.conf import settings
 from django.utils import timezone
 
-from financial.models import Bank, Category, TransactionType, BankAccount, Transaction
+from financial.models import (
+    Bank,
+    Category,
+    TransactionType,
+    BankAccount,
+    Transaction,
+    CreditCard,
+)
 
 
 @pytest.fixture
@@ -50,6 +59,22 @@ def create_test_account(create_test_user, create_test_bank):
         ),
     )
     return account
+
+
+@pytest.fixture
+def create_test_credit_card(create_test_user, create_test_bank):
+    card, _ = CreditCard.objects.get_or_create(
+        bank=create_test_bank,
+        name="Card 1",
+        final_number="1234",
+        _expiration_date=Fernet(settings.CRYPTOGRAPHY_KEY).encrypt(b"06/31"),
+        defaults=dict(
+            limit=100,
+            flag=CreditCard.CreditCardFlag.MASTER,
+            created_by=create_test_user,
+        ),
+    )
+    return card
 
 
 @pytest.fixture
