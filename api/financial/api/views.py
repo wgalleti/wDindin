@@ -46,7 +46,7 @@ class CreditCardViewSetV1(BaseViewSet):
     serializer_class = CreditCardSerializerV1
 
     @action(methods=["GET"], detail=False)
-    def types(self, request):
+    def flags(self, request):
         data = [
             {
                 "id": key,

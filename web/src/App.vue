@@ -6,6 +6,7 @@
       <template #append>
         <BankRegister />
         <BankAccountRegister />
+        <CreditCardRegister />
         <CategoryRegister />
         <v-btn class="text-none me-2" height="48" icon slim>
           <v-avatar
@@ -38,6 +39,7 @@ import { $store } from '@/main'
 import { useTheme } from 'vuetify'
 
 import BankRegister from '@/components/register/BankRegister.vue'
+import CreditCardRegister from '@/components/register/CreditCardRegister.vue'
 import BankAccountRegister from '@/components/register/BankAccountRegister.vue'
 import CategoryRegister from '@/components/register/CategoryRegister.vue'
 

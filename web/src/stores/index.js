@@ -4,6 +4,7 @@ import authStore from '@/stores/auth'
 import bankStore from '@/stores/bank'
 import bankAccountStore from '@/stores/bankaccount'
 import categoryStore from '@/stores/category'
+import creditCardStore from '@/stores/creditcard'
 
 export const useStore = defineStore('core', {
   state: () => state,
@@ -13,6 +14,7 @@ export const useStore = defineStore('core', {
       this.bank = bankStore()
       this.bankAccount = bankAccountStore()
       this.category = categoryStore()
+      this.creditCard = creditCardStore()
     }
   }
 })
