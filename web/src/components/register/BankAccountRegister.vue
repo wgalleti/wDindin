@@ -1,10 +1,5 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    max-width="600"
-    transition="slide-y-transition"
-    persistent
-  >
+  <v-dialog v-model="dialog" max-width="900" transition="slide-y-transition" persistent>
     <template v-slot:activator="{ props: activatorProps }">
       <v-btn
         class="text-none font-weight-regular"
