@@ -25,7 +25,7 @@ class BankViewSetV1(BaseViewSet):
     serializer_class = BankSerializerV1
 
 
-class BankAccountViewSetV1(viewsets.ModelViewSet):
+class BankAccountViewSetV1(BaseViewSet):
     queryset = BankAccount.objects.all()
     serializer_class = BankAccountSerializerV1
 
@@ -57,7 +57,7 @@ class CreditCardViewSetV1(BaseViewSet):
         return Response(data)
 
 
-class CategoryViewSetV1(viewsets.ModelViewSet):
+class CategoryViewSetV1(BaseViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializerV1
 
@@ -73,6 +73,6 @@ class CategoryViewSetV1(viewsets.ModelViewSet):
         return Response(data)
 
 
-class TransactionViewSetV1(viewsets.ModelViewSet):
+class TransactionViewSetV1(BaseViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializerV1

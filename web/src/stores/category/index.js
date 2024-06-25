@@ -10,9 +10,9 @@ export default defineStore('category', {
         const { data } = await http.get('/api/v1/categories/', {
           params: { all: true }
         })
-        this.banks = data
+        this.categories = data
       } catch {
-        this.banks = []
+        this.categories = []
       }
     },
     async loadTypes() {

@@ -8,6 +8,7 @@
         <BankAccountRegister />
         <CreditCardRegister />
         <CategoryRegister />
+        <TransactionRegister />
         <v-btn class="text-none me-2" height="48" icon slim>
           <v-avatar
             color="surface-light"
@@ -42,6 +43,7 @@ import BankRegister from '@/components/register/BankRegister.vue'
 import CreditCardRegister from '@/components/register/CreditCardRegister.vue'
 import BankAccountRegister from '@/components/register/BankAccountRegister.vue'
 import CategoryRegister from '@/components/register/CategoryRegister.vue'
+import TransactionRegister from '@/components/register/TransactionRegister.vue'
 
 const isLogged = toRef($store.auth, 'isAuthenticated')
 const theme = useTheme()

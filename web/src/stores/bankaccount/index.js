@@ -10,9 +10,9 @@ export default defineStore('bankAccount', {
         const { data } = await http.get('/api/v1/accounts/', {
           params: { all: true }
         })
-        this.banks = data
+        this.accounts = data
       } catch {
-        this.banks = []
+        this.accounts = []
       }
     },
     async loadTypes() {

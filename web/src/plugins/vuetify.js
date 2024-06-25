@@ -3,6 +3,8 @@ import 'vuetify/styles'
 
 import { createVuetify } from 'vuetify'
 import { VNumberInput } from 'vuetify/labs/VNumberInput'
+import { VDateInput } from 'vuetify/labs/VDateInput'
+import { pt } from 'vuetify/locale'
 
 const wTheme = {
   dark: true,
@@ -19,6 +21,16 @@ const wTheme = {
 }
 
 export default createVuetify({
+  locale: {
+    locale: 'pt',
+    fallback: 'pt',
+    messages: { pt }
+  },
+  date: {
+    locale: {
+      pt: 'pt-BR'
+    }
+  },
   theme: {
     defaultTheme: 'wTheme',
     themes: {
@@ -27,6 +39,7 @@ export default createVuetify({
   },
 
   components: {
-    VNumberInput
+    VNumberInput,
+    VDateInput
   }
 })
