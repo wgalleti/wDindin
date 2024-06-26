@@ -109,6 +109,7 @@ python -c 'from cryptography.fernet import Fernet; key = Fernet.generate_key(); 
 echo 'VITE_APP_BASE_URL=http://api.wdindin.io' > web/.env
 
 docker compose up -d
+docker compose exec api python manage.py createsuperuser
 ```
 
 Para acessar a aplicação que será servida pelo nginx, criar um fake dns no `/etc/hosts` no linux/mac ou `C:\windows\system\drivers\etc\hosts` no windows:
