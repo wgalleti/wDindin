@@ -1,17 +1,11 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    max-width="600"
-    transition="slide-y-transition"
-    persistent
-  >
+  <v-dialog v-model="dialog" max-width="600" transition="slide-y-transition" persistent>
     <template v-slot:activator="{ props: activatorProps }">
-      <v-btn
-        class="text-none font-weight-regular"
-        prepend-icon="mdi-bank"
-        variant="text"
-        v-bind="activatorProps"
-      ></v-btn>
+      <v-btn class="text-none font-weight-regular" variant="text" v-bind="activatorProps">
+        <v-badge color="error" :content="$store.bank.banks.length">
+          <v-icon size="large">mdi-bank</v-icon></v-badge
+        >
+      </v-btn>
     </template>
 
     <v-card prepend-icon="mdi-bank" title="Cadastrar um novo banco">
@@ -34,6 +28,7 @@ export default {
   methods: {
     close() {
       this.dialog = false
+      this.$store.bank.load()
     }
   }
 }

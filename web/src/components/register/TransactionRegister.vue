@@ -9,7 +9,7 @@
       />
     </template>
 
-    <v-card prepend-icon="mdi-bank" title="Cadastrar um novo cartão de crédito">
+    <v-card prepend-icon="mdi-bank" title="Cadastrar uma nova transação">
       <v-card-text class="py-5">
         <TransactionForm @finished="close" @cancel="close" />
       </v-card-text>

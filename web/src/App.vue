@@ -1,6 +1,6 @@
 <template>
-  <v-layout>
-    <v-app-bar border="b" class="ps-4" density="compact" flat v-if="isLogged">
+  <v-layout class="h-full w-full">
+    <v-app-bar density="compact" flat v-if="isLogged">
       <v-app-bar-title>wDinDin</v-app-bar-title>
 
       <template #append>
@@ -26,16 +26,14 @@
       </template>
     </v-app-bar>
 
-    <v-main>
-      <div class="pa-4">
-        <router-view />
-      </div>
+    <v-main class="h-full w-full">
+      <router-view />
     </v-main>
   </v-layout>
 </template>
 
 <script setup>
-import { toRef } from 'vue'
+import { toRef, onMounted } from 'vue'
 import { $store } from '@/main'
 import { useTheme } from 'vuetify'
 
@@ -51,4 +49,11 @@ const theme = useTheme()
 function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
 }
+
+onMounted(() => {
+  $store.bank.load()
+  $store.bankAccount.load()
+  $store.creditCard.load()
+  $store.category.load()
+})
 </script>

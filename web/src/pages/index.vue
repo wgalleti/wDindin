@@ -6,6 +6,4 @@
   </v-container>
 </template>
 
-<script setup>
-import TransactionForm from '@/components/forms/TransactionForm.vue'
-</script>
+<script setup></script>
