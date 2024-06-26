@@ -2,7 +2,7 @@ import axios from 'axios'
 import constants from '@/constants'
 
 const _axios = axios.create({
-  baseURL: 'http://localhost:8000/'
+  baseURL: import.meta.env.VITE_APP_BASE_URL
 })
 
 _axios.interceptors.request.use((config) => {

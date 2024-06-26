@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from decouple import config, Csv
+from dj_database_url import parse as dburl
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -56,12 +57,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DEFAULT_DATABASE = "sqlite:///" + os.path.join(BASE_DIR, "web_price.sqlite3")
+DATABASES = {"default": config("DATABASE_URL", cast=dburl, default=DEFAULT_DATABASE)}
 
 AUTH_PASSWORD_VALIDATORS = [
     {

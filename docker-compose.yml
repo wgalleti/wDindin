@@ -1,0 +1,82 @@
+services:
+  database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    hostname: database
+    container_name: database
+    environment:
+      POSTGRES_USER: wdindin
+      POSTGRES_PASSWORD: wdindin
+      POSTGRES_DB: wdindin
+    networks:
+      api:
+        aliases:
+          - postgres
+    restart: unless-stopped
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    command: >
+      sh -c "
+      python manage.py migrate --noinput &&
+      python manage.py collectstatic --noinput --clear &&
+      gunicorn config.wsgi:application --bind 0.0.0.0:8000
+      "
+    hostname: api
+    depends_on:
+      - database
+    env_file:
+      - ./api/.env
+    volumes:
+      - ./api:/api
+      - statics:/api/static/
+    ports:
+      - "8000:8000"
+    networks:
+      api:
+        aliases:
+          - api
+    restart: unless-stopped
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    hostname: web
+    depends_on:
+      - api
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "localhost:127.0.0.1"
+    env_file:
+      - ./web/.env
+    volumes:
+      - www:/usr/share/nginx/html/
+    networks:
+      api:
+        aliases:
+          - web
+    restart: unless-stopped
+  app:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    networks:
+      - api
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - www:/usr/share/nginx/html/
+      - statics:/usr/share/nginx/html/statics/
+    depends_on:
+      - api
+      - web
+volumes:
+  www:
+  statics:
+networks:
+  api:
+    name: api
+    driver: bridge
