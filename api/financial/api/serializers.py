@@ -9,6 +9,7 @@ from ..models import (
     Category,
     Transaction,
     CreditCard,
+    TransactionType,
 )
 
 
@@ -28,6 +29,11 @@ class CreditCardSerializerV1(BaseModelCreatedSerializer):
     expiration_date = serializers.CharField(
         max_length=5,
     )
+    balance = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        read_only=True,
+    )
 
     class Meta:
         model = CreditCard
@@ -42,6 +48,7 @@ class CreditCardSerializerV1(BaseModelCreatedSerializer):
             "final_number",
             "limit",
             "bank",
+            "balance",
         ]
 
     def get_expiration_date(self, obj: CreditCard):
@@ -86,6 +93,30 @@ class CategorySerializerV1(BaseModelCreatedSerializer):
 
 
 class TransactionSerializerV1(BaseModelCreatedSerializer):
+
+    def _validate_credit_card(self, data):
+        value = data.get("value", 0)
+        credit_card: CreditCard = data.get("credit_card", None)
+
+        if not credit_card:
+            return
+
+        # Validate category Expense
+        category: Category = data.get("category")
+        if category.transaction_type == TransactionType.INCOME:
+            raise serializers.ValidationError("Credit Card has not receive income")
+
+        # Validate limit
+        available_value = credit_card.balance
+        total = available_value - value
+        if total < 0:
+            raise serializers.ValidationError("Credit Card has not limit")
+
+    def validate(self, data):
+        self._validate_credit_card(data)
+
+        return data
+
     class Meta:
         model = Transaction
         fields = "__all__"

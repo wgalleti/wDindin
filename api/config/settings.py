@@ -134,3 +134,12 @@ SIMPLE_JWT = {
 }
 
 CRYPTOGRAPHY_KEY = config("CRYPTOGRAPHY_KEY").encode()
+
+if DEBUG:
+    NOTEBOOK_ARGUMENTS = [
+        "--ip",
+        "0.0.0.0",
+        "--allow-root",
+        "--no-browser",
+    ]
+    os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"

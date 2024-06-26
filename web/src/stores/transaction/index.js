@@ -16,13 +16,8 @@ export default defineStore('transaction', {
       }
     },
     async add(obj) {
-      console.log('adding')
-      try {
-        const { data } = await http.post('api/v1/transactions/', obj)
-        return data
-      } catch {
-        return false
-      }
+      const { data } = await http.post('api/v1/transactions/', obj)
+      return data
     },
     async update(key, obj) {
       try {

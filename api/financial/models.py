@@ -11,6 +11,7 @@ from core.mixins.models import (
     BaseModelCreatedData,
 )
 from cryptography.fernet import Fernet
+from django.db.models import Sum, Case, When, F, DecimalField
 
 
 class Bank(
@@ -101,6 +102,26 @@ class CreditCard(BaseModelUUID, BaseModelCreatedData):
         f = Fernet(settings.CRYPTOGRAPHY_KEY)
         self._expiration_date = f.encrypt(value.encode("utf-8"))
 
+    @property
+    def balance(self):
+        transactions_value = (
+            self.transactions.all()
+            .aggregate(
+                balance=Sum(
+                    Case(
+                        When(category__transaction_type="INCOME", then=F("value")),
+                        When(
+                            category__transaction_type="EXPENSE", then=F("value") * -1
+                        ),
+                        output_field=DecimalField(),
+                    )
+                )
+            )
+            .get("balance", 0)
+        )
+
+        return self.limit - transactions_value
+
     def save(self, *args, **kwargs):
         if not self.final_number.isdigit() or len(self.final_number) != 4:
             raise ValidationError("Last four digits must be exactly 4 numbers.")
@@ -177,8 +198,21 @@ class Transaction(
         ],
     )
 
+    def _credit_card_validations(self):
+        if not self.credit_card:
+            return
+
+        if self.category.transaction_type == TransactionType.INCOME:
+            raise ValidationError("Credit Card has not receive income")
+
+        if self.credit_card.balance <= 0:
+            raise ValidationError("Credit Card has not limit")
+
     def save(self, *args, **kwargs):
         self.full_clean()
+
+        self._credit_card_validations()
+
         super().save(*args, **kwargs)
 
     @property

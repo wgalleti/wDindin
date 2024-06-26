@@ -57,7 +57,7 @@
       <v-row>
         <v-alert
           closable
-          text="Falha ao salvar a transação."
+          :text="errorMessage"
           type="error"
           variant="tonal"
           class="my-5"
@@ -105,6 +105,7 @@ export default {
     form: {},
     date: new Date(),
     error: false,
+    errorMessage: 'Falha ao salvar a transação.',
     loading: false,
     requiredRule: [(v) => !!v || 'Campo obrigatório']
   }),
@@ -127,11 +128,22 @@ export default {
       const { valid } = await this.$refs.form.validate()
 
       if (valid) {
-        const data = await this.$store.transaction.add(this.form)
-        if (data) {
-          this.$emit('finished')
-          toast.success('Transação registrada com sucesso!')
-        } else {
+        try {
+          const data = await this.$store.transaction.add(this.form)
+          if (data) {
+            this.$emit('finished')
+            toast.success('Transação registrada com sucesso!')
+          } else {
+            this.error = true
+            this.loading = false
+          }
+        } catch ({ response }) {
+          const { data, status } = response
+          if (status === 400) {
+            const { non_field_errors = [] } = data
+            this.errorMessage = non_field_errors.join(' ')
+          }
+
           this.error = true
           this.loading = false
         }
