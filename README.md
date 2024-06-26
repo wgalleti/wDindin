@@ -106,7 +106,7 @@ python -c 'from django.core.management.utils import get_random_secret_key; print
 python -c 'from cryptography.fernet import Fernet; key = Fernet.generate_key(); print(key.decode())'
 # CHANGE YOUR CRYPTOGRAPHY_KEY api/.env
 
-echo 'VITE_APP_BASE_URL=http://localhost:8000/' > web/.env
+echo 'VITE_APP_BASE_URL=http://api.wdindin.io' > web/.env
 
 docker compose up -d
 ```
