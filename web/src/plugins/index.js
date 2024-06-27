@@ -11,6 +11,7 @@ import 'vue-toastification/dist/index.css'
 
 import toastConfig from '@/plugins/toast'
 import '@/plugins/axios'
+import '@/plugins/devextreme'
 
 export function registerPlugins(app) {
   app.use(vuetify).use(Toast, toastConfig)

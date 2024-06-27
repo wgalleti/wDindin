@@ -1,35 +1,39 @@
-<template>
-  <v-dialog v-model="dialog" max-width="900" transition="slide-y-transition" persistent>
-    <template v-slot:activator="{ props: activatorProps }">
-      <v-btn class="text-none font-weight-regular" variant="text" v-bind="activatorProps">
-        <v-badge color="error" :content="$store.bankAccount.accounts.length">
-          <v-icon size="x-large">mdi-wallet-outline</v-icon></v-badge
-        >
-      </v-btn>
-    </template>
-
-    <v-card prepend-icon="mdi-wallet-outline" title="Cadastrar uma nova conta">
-      <v-card-text class="py-5">
-        <BankAccountForm @finished="close" @cancel="close" />
-      </v-card-text>
-    </v-card>
-  </v-dialog>
-</template>
-<script>
+<script setup>
+import { ref, computed } from 'vue'
+import BaseModalRegister from '@/components/register/BaseModalRegister.vue'
 import BankAccountForm from '@/components/forms/BankAccountForm.vue'
+import { $store } from '@/main'
 
-export default {
-  components: {
-    BankAccountForm
-  },
-  data: () => ({
-    dialog: false
-  }),
-  methods: {
-    close() {
-      this.dialog = false
-      this.$store.bankAccount.load()
-    }
-  }
+const oppened = ref(false)
+const title = ref('Cadastrar uma nova conta')
+const icon = ref('mdi-wallet-outline')
+const badge = computed(() => $store.bankAccount.accounts.length)
+
+function hidde() {
+  oppened.value = false
+  $store.bankAccount.load()
+}
+function show() {
+  oppened.value = true
 }
 </script>
+
+<template>
+  <BaseModalRegister
+    :title="title"
+    :icon="icon"
+    @hidde="hidde"
+    @show="show"
+    :openend="oppened"
+    :width="800"
+  >
+    <template v-slot:activator>
+      <v-badge color="error" :content="badge">
+        <v-icon size="large" :icon="icon" />
+      </v-badge>
+    </template>
+    <template v-slot:form>
+      <BankAccountForm @close="hidde" />
+    </template>
+  </BaseModalRegister>
+</template>

@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { toRef, onMounted } from 'vue'
+import { toRef, watch } from 'vue'
 import { $store } from '@/main'
 import { useTheme } from 'vuetify'
 
@@ -50,10 +50,12 @@ function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
 }
 
-onMounted(() => {
-  $store.bank.load()
-  $store.bankAccount.load()
-  $store.creditCard.load()
-  $store.category.load()
+watch(isLogged, (val) => {
+  if (val) {
+    $store.bank.load()
+    $store.bankAccount.load()
+    $store.creditCard.load()
+    $store.category.load()
+  }
 })
 </script>

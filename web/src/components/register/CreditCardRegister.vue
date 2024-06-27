@@ -1,35 +1,39 @@
-<template>
-  <v-dialog v-model="dialog" max-width="900" transition="slide-y-transition" persistent>
-    <template v-slot:activator="{ props: activatorProps }">
-      <v-btn class="text-none font-weight-regular" variant="text" v-bind="activatorProps">
-        <v-badge color="error" :content="$store.creditCard.cards.length">
-          <v-icon size="large">mdi-card-account-details</v-icon></v-badge
-        >
-      </v-btn>
-    </template>
-
-    <v-card prepend-icon="mdi-card-account-details" title="Cadastrar um novo cartão de crédito">
-      <v-card-text class="py-5">
-        <CreditCardForm @finished="close" @cancel="close" />
-      </v-card-text>
-    </v-card>
-  </v-dialog>
-</template>
-<script>
+<script setup>
+import { ref, computed } from 'vue'
+import BaseModalRegister from '@/components/register/BaseModalRegister.vue'
 import CreditCardForm from '@/components/forms/CreditCardForm'
+import { $store } from '@/main'
 
-export default {
-  components: {
-    CreditCardForm
-  },
-  data: () => ({
-    dialog: false
-  }),
-  methods: {
-    close() {
-      this.dialog = false
-      this.$store.creditCard.load()
-    }
-  }
+const oppened = ref(false)
+const title = ref('Cadastrar um novo cartão de crédito')
+const icon = ref('mdi-card-account-details')
+const badge = computed(() => $store.creditCard.cards.length)
+
+function hidde() {
+  oppened.value = false
+  $store.creditCard.load()
+}
+function show() {
+  oppened.value = true
 }
 </script>
+
+<template>
+  <BaseModalRegister
+    :title="title"
+    :icon="icon"
+    @hidde="hidde"
+    @show="show"
+    :openend="oppened"
+    :width="800"
+  >
+    <template v-slot:activator>
+      <v-badge color="error" :content="badge">
+        <v-icon size="large" :icon="icon" />
+      </v-badge>
+    </template>
+    <template v-slot:form>
+      <CreditCardForm @close="hidde" />
+    </template>
+  </BaseModalRegister>
+</template>
