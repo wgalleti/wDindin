@@ -17,7 +17,7 @@ export default defineStore('bankAccount', {
     },
     async loadTypes() {
       try {
-        const { data } = await http.get('/api/v1/accounts/types')
+        const { data } = await http.get('/api/v1/accounts/types/')
         this.types = data
       } catch {
         this.types = []
@@ -33,7 +33,7 @@ export default defineStore('bankAccount', {
     },
     async update(key, bankData) {
       try {
-        const { data } = await http.put(`api/v1/accounts/${key}`, bankData)
+        const { data } = await http.put(`api/v1/accounts/${key}/`, bankData)
         return data
       } catch {
         return false
@@ -41,7 +41,7 @@ export default defineStore('bankAccount', {
     },
     async delete(key) {
       try {
-        await http.delete(`api/v1/accounts/${key}`)
+        await http.delete(`api/v1/accounts/${key}/`)
         return true
       } catch {
         return false

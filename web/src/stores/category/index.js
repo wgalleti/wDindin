@@ -17,7 +17,7 @@ export default defineStore('category', {
     },
     async loadTypes() {
       try {
-        const { data } = await http.get('/api/v1/categories/types')
+        const { data } = await http.get('/api/v1/categories/types/')
         this.types = data
       } catch {
         this.types = []

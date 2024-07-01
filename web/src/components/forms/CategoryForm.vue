@@ -1,113 +1,121 @@
-<template>
-  <v-form ref="form" lazy-validation>
-    <v-container>
-      <v-row>
-        <v-col cols="12">
-          <v-text-field
-            v-model="form.name"
-            label="Nome"
-            :rules="requiredRule"
-            focused
-            autofocus
-            required
-            ref="name"
-          />
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-autocomplete
-            v-model="form.icon"
-            label="Icone"
-            :rules="requiredRule"
-            :items="icons"
-            item-title="name"
-            item-value="id"
-          >
-            <template v-slot:item="{ props, item }">
-              <v-list-item v-bind="props" :prepend-icon="item.value" :title="item.title" />
-            </template>
-          </v-autocomplete>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-autocomplete
-            v-model="form.transaction_type"
-            label="Tipo"
-            :rules="requiredRule"
-            item-title="name"
-            item-value="id"
-            :items="this.$store.category.types"
-            focused
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-alert
-            closable
-            text="Falha ao salvar o banco. Verifique se o código é unico ou entre em contato com o suporte"
-            type="error"
-            variant="tonal"
-            class="my-5"
-            v-model="error"
-          />
-        </v-col>
-      </v-row>
-      <v-row class="flex p-5">
-        <v-btn @click="$emit('cancel')" variant="plain" :loading="loading">Cancelar</v-btn>
-        <v-spacer />
-        <v-btn size="large" color="primary" @click="submit" variant="outlined" :loading="loading"
-          >Salvar</v-btn
-        >
-      </v-row>
-    </v-container>
-  </v-form>
-</template>
-
-<script>
-import { useToast } from 'vue-toastification'
+<script setup>
+import DxForm from 'devextreme-vue/form'
+import ArrayStore from 'devextreme/data/array_store'
+import DataSource from 'devextreme/data/data_source'
 import * as mdiIcons from '@mdi/js'
 
+import { onMounted, ref } from 'vue'
+import { $store } from '@/main'
+import { useToast } from 'vue-toastification'
+
 const toast = useToast()
-export default {
-  data: () => ({
-    error: false,
-    form: {},
-    requiredRule: [(v) => !!v || 'Campo obrigatório'],
-    icons: [],
-    loading: false
-  }),
+const emit = defineEmits(['close'])
+const formData = ref({})
+const formConfig = ref({})
 
-  methods: {
-    loadIcons() {
-      this.icons = Object.keys(mdiIcons).map((icon) => {
-        const id = icon.replace(/([A-Z])/g, '-$1').toLocaleLowerCase()
-        const name = icon.replace('mdi', '').replace(/([A-Z])/g, ' $1')
-        return { id, name }
-      })
-    },
-    async submit() {
-      this.loading = true
-      const { valid } = await this.$refs.form.validate()
-
-      if (valid) {
-        const data = await this.$store.category.add(this.form)
-        if (data) {
-          this.$emit('finished')
-          toast.success('Categoria registrada com sucesso!')
-        } else {
-          this.error = true
-          this.loading = false
-          setTimeout(() => {
-            this.$refs.name.focus()
-          }, 100)
-        }
-      }
-    }
-  },
-  mounted() {
-    this.loadIcons()
-    this.$store.category.loadTypes()
+async function submit() {
+  const data = await $store.category.add(formData.value)
+  if (data) {
+    emit('close')
+    toast.success('Categoria registrada com sucesso!')
+  } else {
+    toast.error('Falha ao registrar a categoria!')
   }
 }
-</script>
 
-<style lang="scss" scoped></style>
+function loadIcons() {
+  const icons = Object.keys(mdiIcons).map((icon) => {
+    const id = icon.replace(/([A-Z])/g, '-$1').toLocaleLowerCase()
+    const name = icon.replace('mdi', '').replace(/([A-Z])/g, ' $1')
+    return { id, name }
+  })
+
+  const store = new ArrayStore({
+    data: icons,
+    key: 'id'
+  })
+
+  return new DataSource({
+    sort: 'name',
+    pageSize: 10,
+    store: store
+  })
+}
+
+onMounted(async () => {
+  const iconDataSource = loadIcons()
+  await $store.category.loadTypes()
+
+  formConfig.value = {
+    labelMode: 'floating',
+    labelLocation: 'top',
+    showColonAfterLabel: false,
+    colCount: 2,
+    items: [
+      {
+        colSpan: 2,
+        dataField: 'name',
+        editorType: 'dxTextBox',
+        label: {
+          text: 'Nome'
+        },
+        validationRules: [{ type: 'required', message: 'Nome é brigatório' }]
+      },
+      {
+        colSpan: 1,
+        dataField: 'icon',
+        editorType: 'dxSelectBox',
+        editorOptions: {
+          dataSource: iconDataSource,
+          displayExpr: 'name',
+          valueExpr: 'id',
+          searchEnabled: true,
+          searchMode: 'contains',
+          searchExpression: ['name', 'code'],
+          paginate: true,
+          pageSize: 20,
+          virtualModeEnabled: true,
+          dropDownOptions: {
+            height: 400 // Ajuste conforme necessário
+          }
+        },
+        label: {
+          text: 'Icone'
+        },
+        validationRules: [{ type: 'required', message: 'Icone é brigatório' }]
+      },
+      {
+        colSpan: 1,
+        dataField: 'transaction_type',
+        editorType: 'dxSelectBox',
+        editorOptions: {
+          items: $store.category.types,
+          displayExpr: 'name',
+          valueExpr: 'id',
+          searchEnabled: true,
+          searchMode: 'contains',
+          searchExpression: ['name', 'code']
+        },
+        label: {
+          text: 'Tipo'
+        },
+        validationRules: [{ type: 'required', message: 'Tipo é brigatório' }]
+      },
+      {
+        colSpan: 2,
+        itemType: 'button',
+        buttonOptions: {
+          text: 'Salvar',
+          icon: 'check',
+          useSubmitBehavior: true
+        }
+      }
+    ]
+  }
+})
+</script>
+<template>
+  <v-form ref="form" lazy-validation @submit.prevent="submit">
+    <DxForm v-bind="formConfig" :form-data="formData" />
+  </v-form>
+</template>

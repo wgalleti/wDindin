@@ -2,15 +2,28 @@ import { defineStore } from 'pinia'
 import state from '@/stores/creditcard/state'
 import http from '@/plugins/axios'
 
+const transformCards = (data) => {
+  return data.map((c) => {
+    const { name, final_number } = c
+    c['card_name'] = `${name} - ${final_number}`
+    return c
+  })
+}
+
 export default defineStore('creditCard', {
   state: () => state,
+  mutations: {
+    setCards(state, cards) {
+      state.cards = cards
+    }
+  },
   actions: {
     async load() {
       try {
         const { data } = await http.get('/api/v1/cards/', {
           params: { all: true }
         })
-        this.cards = data
+        this.cards = transformCards(data)
       } catch {
         this.cards = []
       }

@@ -1,167 +1,151 @@
-<template>
-  <v-form ref="form" lazy-validation>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-date-input
-            v-model="date"
-            label="Data"
-            :rules="requiredRule"
-            required
-            prepend-icon=""
-            :model-value="formatDate"
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6" v-if="!isCreditCard">
-          <v-autocomplete
-            v-model="form.bank_account"
-            label="Conta"
-            :rules="!isCreditCard ? requiredRule : []"
-            item-title="name"
-            item-value="id"
-            :items="$store.bankAccount.accounts"
-            required
-          />
-        </v-col>
-        <v-col cols="12" md="6" v-if="isCreditCard">
-          <v-autocomplete
-            v-model="form.credit_card"
-            label="Cartão"
-            :rules="isCreditCard ? requiredRule : []"
-            item-title="name"
-            item-value="id"
-            :items="$store.creditCard.cards"
-            required
-          />
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-autocomplete
-            v-model="form.category"
-            label="Categoria"
-            :rules="requiredRule"
-            item-title="name"
-            item-value="id"
-            :items="$store.category.categories"
-            required
-          />
-        </v-col>
-        <v-col cols="12" md="3">
-          <CurrencyField v-model="form.value" :rules="requiredRule" required label="Valor" />
-        </v-col>
-        <v-col cols="12" md="12">
-          <v-textarea v-model="form.description" label="Descrição" :rules="requiredRule" required />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-alert
-          closable
-          :text="errorMessage"
-          type="error"
-          variant="tonal"
-          class="my-5"
-          v-model="error"
-        />
-      </v-row>
-      <v-row class="flex p-5">
-        <v-btn @click="$emit('cancel')" variant="plain" :loading="loading">Cancelar</v-btn>
-        <v-spacer />
-        <v-btn size="large" color="primary" @click="submit" variant="outlined" :loading="loading"
-          >Salvar</v-btn
-        >
-      </v-row>
-    </v-container>
-  </v-form>
-</template>
+<script setup>
+import DxForm from 'devextreme-vue/form'
 
-<script>
+import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
+import { $store } from '@/main'
+
+const props = defineProps({
+  bankAccount: { type: Object, required: false },
+  creditCard: { type: Object, required: false },
+  category: { type: Object, required: false },
+  isCreditCard: { type: Boolean, default: false }
+})
+
+const emit = defineEmits(['close'])
 const toast = useToast()
-import CurrencyField from '@/components/CurrencyField.vue'
-export default {
-  components: {
-    CurrencyField
-  },
-  props: {
-    isCreditCard: {
-      type: Boolean,
-      default: true
-    },
-    account: {
-      type: String,
-      default: ''
-    },
-    creditCard: {
-      type: String,
-      default: ''
-    },
-    category: {
-      type: String,
-      default: ''
-    }
-  },
-  data: () => ({
-    form: {},
-    date: new Date(),
-    error: false,
-    errorMessage: 'Falha ao salvar a transação.',
-    loading: false,
-    requiredRule: [(v) => !!v || 'Campo obrigatório']
-  }),
-  computed: {
-    formatDate() {
-      if (this.date) {
-        this.form.date = this.date.toISOString().split('T')[0]
-      }
-      return this.date
-    }
-  },
-  methods: {
-    async loadData() {
-      await this.$store.bankAccount.load()
-      await this.$store.creditCard.load()
-      await this.$store.category.load()
-    },
-    async submit() {
-      this.loading = true
-      const { valid } = await this.$refs.form.validate()
+const formData = ref({})
 
-      if (valid) {
-        try {
-          const data = await this.$store.transaction.add(this.form)
-          if (data) {
-            this.$emit('finished')
-            toast.success('Transação registrada com sucesso!')
-          } else {
-            this.error = true
-            this.loading = false
-          }
-        } catch ({ response }) {
-          const { data, status } = response
-          if (status === 400) {
-            const { non_field_errors = [] } = data
-            this.errorMessage = non_field_errors.join(' ')
-          }
+const formConfig = ref({})
 
-          this.error = true
-          this.loading = false
-        }
-      }
-    }
-  },
-  mounted() {
-    this.loadData()
-
-    if (this.account) {
-      this.form.bank_account = this.account
-    }
-    if (this.creditCard) {
-      this.form.credit_card = this.creditCard
-    }
-    if (this.category) {
-      this.form.category = this.category
-    }
+async function submit() {
+  const data = await $store.transaction.add(formData.value)
+  if (data) {
+    emit('close')
+    toast.success('Transação registrada com sucesso!')
+  } else {
+    toast.error('Falha ao registrar a transação')
   }
 }
+
+onMounted(async () => {
+  await $store.bankAccount.load()
+  await $store.creditCard.load()
+  await $store.category.load()
+
+  formConfig.value = {
+    labelMode: 'floating',
+    labelLocation: 'top',
+    showColonAfterLabel: false,
+    colCount: 11,
+    items: [
+      {
+        dataField: 'date',
+        colSpan: 2,
+        label: {
+          text: 'Data'
+        },
+        editorType: 'dxDateBox',
+        editorOptions: {
+          type: 'date',
+          displayFormat: 'dd/MM/yyyy',
+          dateSerializationFormat: 'yyyy-MM-dd'
+        },
+        validationRules: [{ type: 'required', message: 'Data é obrigatória' }]
+      },
+      {
+        dataField: 'description',
+        colSpan: 9,
+        label: {
+          text: 'Descrição'
+        },
+        validationRules: [{ type: 'required', message: 'Descrição é obrigatória' }]
+      },
+      {
+        dataField: 'bank_account',
+        colSpan: 6,
+        label: {
+          text: 'Conta'
+        },
+        editorType: 'dxSelectBox',
+        editorOptions: {
+          items: $store.bankAccount.accounts,
+          displayExpr: 'name',
+          valueExpr: 'id',
+          searchEnabled: true,
+          searchMode: 'contains',
+          searchExpression: ['name', 'code'],
+          disabled: props.isCreditCard
+        },
+        validationRules: [{ type: 'required', message: 'Contá é obrigatória' }],
+        visible: !props.isCreditCard
+      },
+      {
+        dataField: 'credit_card',
+        colSpan: 6,
+        label: {
+          text: 'Cartão'
+        },
+        editorType: 'dxSelectBox',
+        editorOptions: {
+          items: $store.creditCard.cards,
+          displayExpr: 'name',
+          valueExpr: 'id',
+          searchEnabled: true,
+          searchMode: 'contains',
+          searchExpression: ['name', 'code'],
+          disabled: !props.isCreditCard
+        },
+        validationRules: [{ type: 'required', message: 'Cartão é obrigatória' }],
+        visible: props.isCreditCard
+      },
+      {
+        dataField: 'category',
+        colSpan: 3,
+        label: {
+          text: 'Categoria'
+        },
+        editorType: 'dxSelectBox',
+        editorOptions: {
+          items: $store.category.categories,
+          displayExpr: 'name',
+          valueExpr: 'id',
+          searchEnabled: true,
+          searchMode: 'contains',
+          searchExpression: ['name', 'code']
+        },
+        validationRules: [{ type: 'required', message: 'Categoria é obrigatória' }]
+      },
+      {
+        dataField: 'value',
+        colSpan: 2,
+        label: {
+          text: 'Valor'
+        },
+        editorType: 'dxNumberBox',
+        editorOptions: {
+          format: {
+            type: 'fixedPoint',
+            precision: 2
+          }
+        },
+        validationRules: [{ type: 'required', message: 'Valor é obrigatório' }]
+      },
+      {
+        colSpan: 11,
+        itemType: 'button',
+        buttonOptions: {
+          text: 'Salvar',
+          icon: 'check',
+          useSubmitBehavior: true
+        }
+      }
+    ]
+  }
+})
 </script>
+<template>
+  <v-form ref="form" lazy-validation @submit.prevent="submit">
+    <DxForm v-bind="formConfig" :form-data="formData" />
+  </v-form>
+</template>
