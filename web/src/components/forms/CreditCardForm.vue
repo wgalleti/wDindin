@@ -14,7 +14,7 @@ const formConfig = ref({})
 async function submit() {
   const data = await $store.creditCard.add(formData.value)
   if (data) {
-    emit('finished')
+    emit('close')
     toast.success('Cartão registrado com sucesso!')
   } else {
     toast.error('Falha ao registrar o cartão!')

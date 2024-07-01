@@ -4,8 +4,9 @@ import BaseModalRegister from '@/components/register/BaseModalRegister.vue'
 import CreditCardForm from '@/components/forms/CreditCardForm'
 import { $store } from '@/main'
 
+const emit = defineEmits(['show'])
 const oppened = ref(false)
-const title = ref('Cadastrar um novo cartão de crédito')
+const title = ref('Cartões de crédito')
 const icon = ref('mdi-card-account-details')
 const badge = computed(() => $store.creditCard.cards.length)
 
@@ -15,6 +16,7 @@ function hidde() {
 }
 function show() {
   oppened.value = true
+  emit('show')
 }
 </script>
 
@@ -28,9 +30,15 @@ function show() {
     :width="800"
   >
     <template v-slot:activator>
-      <v-badge color="error" :content="badge">
-        <v-icon size="large" :icon="icon" />
-      </v-badge>
+      <v-list-item @click="show">
+        <template v-slot:prepend>
+          <v-icon :icon="icon"></v-icon>
+        </template>
+        <v-list-item-title>{{ title }}</v-list-item-title>
+        <template v-slot:append>
+          <v-badge color="primary" :content="badge" inline />
+        </template>
+      </v-list-item>
     </template>
     <template v-slot:form>
       <CreditCardForm @close="hidde" />
