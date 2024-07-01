@@ -117,8 +117,11 @@ class CreditCard(BaseModelUUID, BaseModelCreatedData):
                     )
                 )
             )
-            .get("balance", 0)
+            .get("balance")
         )
+
+        if transactions_value is None:
+            return self.limit
 
         return self.limit - transactions_value
 
