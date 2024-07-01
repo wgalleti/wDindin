@@ -25,6 +25,10 @@ class BankAccountSerializerV1(BaseModelCreatedSerializer):
         fields = "__all__"
 
 
+class BankAccountListSerializerV1(BankAccountSerializerV1):
+    bank = BankSerializerV1()
+
+
 class CreditCardSerializerV1(BaseModelCreatedSerializer):
     expiration_date = serializers.CharField(
         max_length=5,
@@ -86,6 +90,10 @@ class CreditCardSerializerV1(BaseModelCreatedSerializer):
         return value
 
 
+class CreditCardListSerializerV1(CreditCardSerializerV1):
+    bank = BankSerializerV1()
+
+
 class CategorySerializerV1(BaseModelCreatedSerializer):
     class Meta:
         model = Category
@@ -120,3 +128,9 @@ class TransactionSerializerV1(BaseModelCreatedSerializer):
     class Meta:
         model = Transaction
         fields = "__all__"
+
+
+class TransactionListSerializerV1(TransactionSerializerV1):
+    bank_account = BankAccountListSerializerV1()
+    credit_card = CreditCardListSerializerV1()
+    category = CategorySerializerV1()

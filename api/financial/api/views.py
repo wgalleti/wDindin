@@ -17,6 +17,7 @@ from .serializers import (
     CategorySerializerV1,
     TransactionSerializerV1,
     CreditCardSerializerV1,
+    TransactionListSerializerV1,
 )
 
 
@@ -76,3 +77,4 @@ class CategoryViewSetV1(BaseViewSet):
 class TransactionViewSetV1(BaseViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializerV1
+    list_serializer_class = TransactionListSerializerV1
