@@ -4,17 +4,20 @@ import DxForm from 'devextreme-vue/form'
 import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
 import { $store } from '@/main'
+import { formatDate } from 'devextreme/localization'
 
 const props = defineProps({
   bankAccount: { type: String, required: false },
   creditCard: { type: String, required: false },
   category: { type: String, required: false },
-  isCreditCard: { type: Boolean, default: false }
+  isCreditCard: { type: Boolean, default: false },
+  focus: { type: String, default: 'date' }
 })
 
 const emit = defineEmits(['close'])
 const toast = useToast()
 const formData = ref({})
+const formInstance = ref(null)
 
 const formConfig = ref({})
 
@@ -26,6 +29,14 @@ async function submit() {
   } else {
     toast.error('Falha ao registrar a transação')
   }
+}
+function onContentReady({ component }) {
+  formInstance.value = component
+  const focusEditor = formInstance.value.getEditor(props.focus)
+  if (focusEditor)
+    setTimeout(() => {
+      focusEditor.focus()
+    }, 100)
 }
 
 onMounted(async () => {
@@ -146,10 +157,11 @@ onMounted(async () => {
       }
     ]
   }
+  formData.value['date'] = formatDate(new Date(), 'yyyy-MM-dd')
 })
 </script>
 <template>
-  <v-form ref="form" lazy-validation @submit.prevent="submit">
-    <DxForm v-bind="formConfig" :form-data="formData" />
+  <v-form lazy-validation @submit.prevent="submit">
+    <DxForm v-bind="formConfig" :form-data="formData" :onContentReady="onContentReady" />
   </v-form>
 </template>

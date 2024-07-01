@@ -49,7 +49,7 @@ onMounted(async () => {
           <div>{{ account.name }}</div>
         </div>
 
-        <TransactionRegister :bank-account="account.id" @close="update" />
+        <TransactionRegister :bank-account="account.id" @close="update" focus="description" />
       </v-card-title>
       <v-card-text>
         <p class="text-5xl tracking-tighter font-extralight text-center">{{ account.balance }}</p>
