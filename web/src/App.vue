@@ -1,6 +1,6 @@
 <template>
   <v-layout class="h-full w-full">
-    <v-app-bar density="compact" flat v-if="isLogged">
+    <v-app-bar density="compact" flat v-if="isLogged" app>
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" />
       <v-app-bar-title>wDinDin</v-app-bar-title>
 

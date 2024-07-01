@@ -34,7 +34,7 @@ function show() {
     :width="800"
   >
     <template v-slot:activator>
-      <v-icon size="large" :icon="icon" />
+      <v-icon size="large" :icon="icon" @click="show" />
     </template>
     <template v-slot:form>
       <TransactionForm

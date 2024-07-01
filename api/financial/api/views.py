@@ -79,6 +79,6 @@ class CategoryViewSetV1(BaseViewSet):
 
 
 class TransactionViewSetV1(BaseViewSet):
-    queryset = Transaction.objects.all()
+    queryset = Transaction.objects.all().order_by("-created_at")
     serializer_class = TransactionSerializerV1
     list_serializer_class = TransactionListSerializerV1
