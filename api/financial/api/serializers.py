@@ -20,6 +20,12 @@ class BankSerializerV1(BaseModelCreatedSerializer):
 
 
 class BankAccountSerializerV1(BaseModelCreatedSerializer):
+    balance = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        read_only=True,
+    )
+
     class Meta:
         model = BankAccount
         fields = "__all__"

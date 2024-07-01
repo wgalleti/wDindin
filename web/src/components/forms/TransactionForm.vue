@@ -6,9 +6,9 @@ import { useToast } from 'vue-toastification'
 import { $store } from '@/main'
 
 const props = defineProps({
-  bankAccount: { type: Object, required: false },
-  creditCard: { type: Object, required: false },
-  category: { type: Object, required: false },
+  bankAccount: { type: String, required: false },
+  creditCard: { type: String, required: false },
+  category: { type: String, required: false },
   isCreditCard: { type: Boolean, default: false }
 })
 
@@ -32,6 +32,10 @@ onMounted(async () => {
   await $store.bankAccount.load()
   await $store.creditCard.load()
   await $store.category.load()
+
+  if (props.creditCard) formData.value['credit_card'] = props.creditCard
+  if (props.bankAccount) formData.value['bank_account'] = props.bankAccount
+  if (props.category) formData.value['category'] = props.category
 
   formConfig.value = {
     labelMode: 'floating',
@@ -75,7 +79,7 @@ onMounted(async () => {
           searchEnabled: true,
           searchMode: 'contains',
           searchExpression: ['name', 'code'],
-          disabled: props.isCreditCard
+          disabled: props.isCreditCard || props.bankAccount
         },
         validationRules: [{ type: 'required', message: 'Contá é obrigatória' }],
         visible: !props.isCreditCard

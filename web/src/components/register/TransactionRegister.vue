@@ -3,12 +3,20 @@ import { ref } from 'vue'
 import BaseModalRegister from '@/components/register/BaseModalRegister.vue'
 import TransactionForm from '@/components/forms/TransactionForm'
 
+const emit = defineEmits(['close'])
 const oppened = ref(false)
 const title = ref('Cadastrar uma nova transação')
-const icon = ref('mdi-calendar-check')
+const icon = ref('mdi-plus')
+const props = defineProps({
+  bankAccount: { type: String, required: false },
+  creditCard: { type: String, required: false },
+  category: { type: String, required: false },
+  isCreditCard: { type: Boolean, default: false }
+})
 
 function hidde() {
   oppened.value = false
+  emit('close')
 }
 function show() {
   oppened.value = true
@@ -28,7 +36,13 @@ function show() {
       <v-icon size="large" :icon="icon" />
     </template>
     <template v-slot:form>
-      <TransactionForm @close="hidde" />
+      <TransactionForm
+        @close="hidde"
+        :bank-account="props.bankAccount"
+        :credit-card="props.creditCard"
+        :category="props.category"
+        :is-credit-card="!!props.creditCard"
+      />
     </template>
   </BaseModalRegister>
 </template>

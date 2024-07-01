@@ -62,6 +62,29 @@ class BankAccount(
     def __str__(self):
         return f"{self.bank.name} - {self.name} ({self.get_account_type_display()})"
 
+    @property
+    def balance(self):
+        transactions_value = (
+            self.transactions.all()
+            .aggregate(
+                balance=Sum(
+                    Case(
+                        When(category__transaction_type="INCOME", then=F("value")),
+                        When(
+                            category__transaction_type="EXPENSE", then=F("value") * -1
+                        ),
+                        output_field=DecimalField(),
+                    )
+                )
+            )
+            .get("balance")
+        )
+
+        if transactions_value is None:
+            return self.initial_balance
+
+        return self.initial_balance + transactions_value
+
 
 class CreditCard(BaseModelUUID, BaseModelCreatedData):
     class CreditCardFlag(models.TextChoices):
@@ -123,7 +146,7 @@ class CreditCard(BaseModelUUID, BaseModelCreatedData):
         if transactions_value is None:
             return self.limit
 
-        return self.limit - transactions_value
+        return self.limit + transactions_value
 
     def save(self, *args, **kwargs):
         if not self.final_number.isdigit() or len(self.final_number) != 4:

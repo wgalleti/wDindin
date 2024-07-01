@@ -1,9 +1,11 @@
 <template>
   <v-container fluid>
     <v-col class="flex gap-4">
-      <h1>wDindin</h1>
+      <Accounts />
     </v-col>
   </v-container>
 </template>
 
-<script setup></script>
+<script setup>
+import Accounts from '@/components/accounts/Index.vue'
+</script>

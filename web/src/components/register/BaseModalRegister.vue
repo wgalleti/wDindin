@@ -14,7 +14,12 @@ const emit = defineEmits(['show', 'hidde'])
 <template>
   <v-dialog v-model="openend" :max-width="width || 600" transition="slide-y-transition" persistent>
     <template v-slot:activator>
-      <v-btn class="text-none font-weight-regular" variant="text" @click="emit('show')">
+      <v-btn
+        class="text-none font-weight-regular"
+        variant="text"
+        @click="emit('show')"
+        size="small"
+      >
         <slot name="activator"></slot>
       </v-btn>
     </template>

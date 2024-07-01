@@ -18,6 +18,7 @@ from .serializers import (
     TransactionSerializerV1,
     CreditCardSerializerV1,
     TransactionListSerializerV1,
+    BankAccountListSerializerV1,
 )
 
 
@@ -29,6 +30,7 @@ class BankViewSetV1(BaseViewSet):
 class BankAccountViewSetV1(BaseViewSet):
     queryset = BankAccount.objects.all()
     serializer_class = BankAccountSerializerV1
+    list_serializer_class = BankAccountListSerializerV1
 
     @action(methods=["GET"], detail=False)
     def types(self, request):
