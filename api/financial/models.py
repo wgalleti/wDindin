@@ -25,6 +25,11 @@ class Bank(
         max_length=100,
         unique=True,
     )
+    color = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
 
     def save(self, *args, **kwargs):
         self.full_clean()

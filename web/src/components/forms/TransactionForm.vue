@@ -109,7 +109,7 @@ onMounted(async () => {
           searchEnabled: true,
           searchMode: 'contains',
           searchExpression: ['name', 'code'],
-          disabled: !props.isCreditCard
+          disabled: !props.isCreditCard || props.creditCard
         },
         validationRules: [{ type: 'required', message: 'Cartão é obrigatória' }],
         visible: props.isCreditCard
@@ -122,12 +122,15 @@ onMounted(async () => {
         },
         editorType: 'dxSelectBox',
         editorOptions: {
-          items: $store.category.categories,
+          items: props.isCreditCard
+            ? $store.category.categories.filter((c) => c.transaction_type === 'EXPENSE')
+            : $store.category.categories,
           displayExpr: 'name',
           valueExpr: 'id',
           searchEnabled: true,
           searchMode: 'contains',
-          searchExpression: ['name', 'code']
+          searchExpression: ['name', 'code'],
+          disabled: props.category
         },
         validationRules: [{ type: 'required', message: 'Categoria é obrigatória' }]
       },

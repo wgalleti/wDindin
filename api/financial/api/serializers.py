@@ -101,6 +101,12 @@ class CreditCardListSerializerV1(CreditCardSerializerV1):
 
 
 class CategorySerializerV1(BaseModelCreatedSerializer):
+    value = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        read_only=True,
+    )
+
     class Meta:
         model = Category
         fields = "__all__"
