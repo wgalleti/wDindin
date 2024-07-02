@@ -39,6 +39,7 @@ const formConfig = {
       buttonOptions: {
         text: 'Salvar',
         icon: 'check',
+        type: 'success',
         useSubmitBehavior: true
       }
     }

@@ -72,7 +72,6 @@ export default defineStore('query', {
       }
     },
     async loadTransactions() {
-      console.log(this.transactionsFilter)
       const { search } = this.transactionsFilter
 
       try {

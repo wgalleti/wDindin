@@ -23,9 +23,11 @@ async function update() {
 </script>
 
 <template>
-  <v-card class="w-full my-2">
-    <v-list>
-      <v-list-subheader>Cartões</v-list-subheader>
+  <v-card color="primary">
+    <v-list bg-color="secondary">
+      <v-list-subheader class="text-accent uppercase border-b border-accent mb-2"
+        >Cartões</v-list-subheader
+      >
 
       <v-list-item v-for="(item, i) in cardTransform" :key="i" :value="item" :color="item.color">
         <template v-slot:append>

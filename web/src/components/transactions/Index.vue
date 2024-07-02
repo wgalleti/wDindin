@@ -15,31 +15,38 @@ onMounted(async () => {
 })
 
 watch(searchQuery, (v) => {
+  if (!v || v.length === 0) {
+    $store.query.setFilter({ search: null })
+    loadTransactions()
+    return
+  }
+
   if (v.length > 2) {
     const search = v
     $store.query.setFilter({ search })
     loadTransactions()
-  }
-
-  if (v.length === 0) {
-    $store.query.setFilter({ search: null })
-    loadTransactions()
+    return
   }
 })
 </script>
 
 <template>
   <div class="w-full mt-2">
-    <v-toolbar density="compact" flat color="primary" title="Movimentos">
+    <v-toolbar density="compact" flat color="secondary">
+      <v-toolbar-title class="text-accent">Movimentos</v-toolbar-title>
       <v-text-field
         append-inner-icon="mdi-magnify"
         hide-details
         single-line
         v-model="searchQuery"
+        color="primary"
+        class="text-accent"
+        clearable
+        show
       ></v-text-field>
     </v-toolbar>
 
-    <v-list lines="two">
+    <v-list lines="two" bg-color="secondary">
       <v-list-item link v-for="transaction in transactions" :key="transaction.id">
         <template v-slot:prepend>
           <div class="mx-3">

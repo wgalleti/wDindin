@@ -165,6 +165,7 @@ onMounted(async () => {
         buttonOptions: {
           text: 'Salvar',
           icon: 'check',
+          type: 'success',
           useSubmitBehavior: true
         }
       }

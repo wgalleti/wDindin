@@ -45,9 +45,10 @@ const formConfig = {
       buttonOptions: {
         text: 'Entrar',
         icon: 'user',
+        type: 'success',
         useSubmitBehavior: true,
         elementAttr: {
-          class: 'text-xs bg-purple-800'
+          class: 'text-xs'
         }
       }
     }

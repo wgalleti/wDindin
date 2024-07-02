@@ -21,8 +21,10 @@ async function update() {
 
 <template>
   <v-card class="w-full my-2">
-    <v-list>
-      <v-list-subheader>Categorias</v-list-subheader>
+    <v-list bg-color="secondary">
+      <v-list-subheader class="text-accent uppercase border-b border-accent mb-2"
+        >Categorias</v-list-subheader
+      >
 
       <v-list-item
         v-for="(item, i) in categoryTransform"
