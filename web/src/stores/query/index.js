@@ -40,7 +40,7 @@ const transformTransactions = (data) => {
       t['icon_color'] = transaction_type === 'INCOME' ? 'green' : 'red'
     }
 
-    t['value'] = `R$ ${formatNumber(t.value, { type: 'fixedPoint', precision: 0 })}`
+    t['value'] = `R$ ${formatNumber(t.value, { type: 'fixedPoint', precision: 2 })}`
 
     return t
   })

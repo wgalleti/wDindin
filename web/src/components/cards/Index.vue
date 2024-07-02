@@ -10,7 +10,7 @@ const cardTransform = computed(() => {
     return {
       id: card.id,
       name: `${card.bank?.name} ${card.name}`,
-      balance: `R$ ${formatNumber(card.balance, { type: 'fixedPoint', precision: 0 })}`,
+      balance: `R$ ${formatNumber(card.balance, { type: 'fixedPoint', precision: 2 })}`,
       typeName: card.account_type,
       bank: card.bank?.name,
       color: card.bank?.color

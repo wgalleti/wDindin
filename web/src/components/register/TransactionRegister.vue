@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { $store } from '@/main'
 import BaseModalRegister from '@/components/register/BaseModalRegister.vue'
 import TransactionForm from '@/components/forms/TransactionForm'
 const emit = defineEmits(['close'])
@@ -18,6 +19,7 @@ const props = defineProps({
 function hidde() {
   oppened.value = false
   emit('close')
+  $store.query.loadTransactions()
 }
 function show() {
   oppened.value = true

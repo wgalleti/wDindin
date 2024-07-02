@@ -9,7 +9,7 @@ const accountTransform = computed(() => {
     return {
       id: account.id,
       name: `${account.bank?.name} ${account.name}`,
-      balance: `R$ ${formatNumber(account.balance, { type: 'fixedPoint', precision: 0 })}`,
+      balance: `R$ ${formatNumber(account.balance, { type: 'fixedPoint', precision: 2 })}`,
       typeName: account.account_type,
       bank: account.bank?.name,
       color: account.bank?.color

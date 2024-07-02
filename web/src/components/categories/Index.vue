@@ -10,7 +10,7 @@ const categoryTransform = computed(() => {
     return {
       id: category.id,
       name: category.name,
-      value: `R$ ${formatNumber(category.value, { type: 'fixedPoint', precision: 0 })}`
+      value: `R$ ${formatNumber(category.value, { type: 'fixedPoint', precision: 2 })}`
     }
   })
 })

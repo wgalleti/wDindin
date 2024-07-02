@@ -130,7 +130,9 @@ class TransactionSerializerV1(BaseModelCreatedSerializer):
         available_value = credit_card.balance
         total = available_value - value
         if total < 0:
-            raise serializers.ValidationError("Credit Card has not limit")
+            raise serializers.ValidationError(
+                f"Credit Card has not limit. Available: {available_value}"
+            )
 
     def validate(self, data):
         self._validate_credit_card(data)

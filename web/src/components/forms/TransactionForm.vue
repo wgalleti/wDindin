@@ -22,12 +22,22 @@ const formInstance = ref(null)
 const formConfig = ref({})
 
 async function submit() {
-  const data = await $store.transaction.add(formData.value)
-  if (data) {
-    emit('close')
-    toast.success('Transação registrada com sucesso!')
-  } else {
-    toast.error('Falha ao registrar a transação')
+  try {
+    const data = await $store.transaction.add(formData.value)
+    if (data) {
+      emit('close')
+      toast.success('Transação registrada com sucesso!')
+    } else {
+      toast.error('Falha ao registrar a transação')
+    }
+  } catch ({ response }) {
+    const { data, status } = response
+    let errorMessage = 'Falha ao registrar a transação'
+    if (status === 400) {
+      const { non_field_errors = [] } = data
+      errorMessage = non_field_errors.join(' ')
+    }
+    toast.error(errorMessage)
   }
 }
 function onContentReady({ component }) {
