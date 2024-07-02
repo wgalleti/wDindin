@@ -82,3 +82,4 @@ class TransactionViewSetV1(BaseViewSet):
     queryset = Transaction.objects.all().order_by("-created_at")
     serializer_class = TransactionSerializerV1
     list_serializer_class = TransactionListSerializerV1
+    filterset_fields = ("description", "value")

@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_filters",
     "django_extensions",
     "corsheaders",
     "rest_framework",
@@ -106,8 +107,8 @@ REST_FRAMEWORK = {
     # "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
+        "core.rest.CustomSearchFilter",
         "rest_framework.filters.OrderingFilter",
-        "rest_framework.filters.SearchFilter",
     ),
     "PAGE_SIZE": 20,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),

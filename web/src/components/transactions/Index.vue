@@ -1,18 +1,42 @@
 <script setup>
-import { toRef, onMounted } from 'vue'
+import { toRef, onMounted, ref, watch } from 'vue'
 import { $store } from '@/main'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 const transactions = toRef($store.query, 'transactions')
-onMounted(async () => {
+const searchQuery = ref('')
+
+const loadTransactions = async () => {
   await $store.query.loadTransactions()
+}
+
+onMounted(async () => {
+  await loadTransactions()
+})
+
+watch(searchQuery, (v) => {
+  if (v.length > 2) {
+    const search = v
+    $store.query.setFilter({ search })
+    loadTransactions()
+  }
+
+  if (v.length === 0) {
+    $store.query.setFilter({ search: null })
+    loadTransactions()
+  }
 })
 </script>
 
 <template>
   <div class="w-full mt-2">
     <v-toolbar density="compact" flat color="primary" title="Movimentos">
-      <v-text-field append-inner-icon="mdi-magnify" hide-details single-line></v-text-field>
+      <v-text-field
+        append-inner-icon="mdi-magnify"
+        hide-details
+        single-line
+        v-model="searchQuery"
+      ></v-text-field>
     </v-toolbar>
 
     <v-list lines="two">

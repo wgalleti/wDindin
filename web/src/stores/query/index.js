@@ -54,22 +54,31 @@ export default defineStore('query', {
       end: null,
       category: null,
       bankAccount: null,
-      creditCard: null
+      creditCard: null,
+      description: null,
+      search: null
     }
   }),
   actions: {
+    setFilter({ start, end, category, bankAccount, creditCard, description, search }) {
+      this.transactionsFilter = {
+        start,
+        end,
+        category,
+        bankAccount,
+        creditCard,
+        description,
+        search
+      }
+    },
     async loadTransactions() {
-      const { start, end, category, type, bankAccountId, creditCardId } = this.transactionsFilter
+      console.log(this.transactionsFilter)
+      const { search } = this.transactionsFilter
 
       try {
         const { data } = await http.get('api/v1/transactions/', {
           params: {
-            start,
-            end,
-            category,
-            type,
-            bankAccountId,
-            creditCardId,
+            search,
             all: true
           }
         })

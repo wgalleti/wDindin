@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from django.db.models import AutoField, CharField, ForeignKey
+from django.db.models import AutoField, CharField, ForeignKey, TextField
 from rest_framework import pagination, response
 from rest_framework.filters import SearchFilter
 
@@ -37,7 +37,7 @@ class CustomSearchFilter(SearchFilter):
 
         search_fields = []
         for i in view.get_queryset().model._meta.get_fields():
-            if isinstance(i, (CharField, AutoField, ForeignKey)):
+            if isinstance(i, (CharField, AutoField, ForeignKey, TextField)):
                 if isinstance(i, ForeignKey):
                     for j in i.related_model.objects.model._meta.get_fields():
                         if isinstance(j, (CharField, AutoField)):
